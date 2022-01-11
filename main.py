@@ -10,8 +10,8 @@ from diffaugment import aug_fn
 def main():
 
     batch_size = 1
-    monet_filenames = tf.io.gfile.glob(str('./gan-getting-started/monet_tfrec/*.tfrec'))
-    photo_filenames = tf.io.gfile.glob(str('./gan-getting-started/photo_tfrec/*.tfrec'))
+    monet_filenames = tf.io.gfile.glob(str('/home/simon/Desktop/Uni/SRP/gan-getting-started/monet_tfrec/*.tfrec'))
+    photo_filenames = tf.io.gfile.glob(str('/home/simon/Desktop/Uni/SRP/gan-getting-started/photo_tfrec/*.tfrec'))
 
     final_dataset = get_gan_dataset(monet_filenames, photo_filenames, augment=None, repeat=True, shuffle=True,
                                     batch_size=batch_size)
