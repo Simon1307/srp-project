@@ -32,8 +32,9 @@ def Monet_Output_Layer():
     x = inp
 
     last = tf.keras.layers.Conv2D(1, 4, strides=1, kernel_initializer=initializer)(x)  # (size, 30, 30, 1)
+    #global_avg = tf.keras.layers.GlobalAveragePooling2D()(last)
 
-    return tf.keras.Model(inputs=inp, outputs=last)
+    return tf.keras.Model(inputs=inp, outputs=last)  #, global_avg))
 
 
 def Photo_Discriminator():

@@ -7,9 +7,10 @@ from loss_functions import generator_loss1, generator_loss2, discriminator_loss1
 from loss_functions import cycle_loss, identity_loss
 from diffaugment import aug_fn
 
+
 def main():
 
-    batch_size = 1
+    batch_size = 16
 
     monet_filepath = '/home/simon/Desktop/Uni/SRP/gan-getting-started/monet_tfrec/*.tfrec'
     photo_filepath = '/home/simon/Desktop/Uni/SRP/gan-getting-started/photo_tfrec/*.tfrec'
@@ -27,6 +28,12 @@ def main():
     output2 = Monet_Output_Layer()  # learned with loss function awarding ---
     photo_discriminator = Photo_Discriminator()  # differentiates real photos and generated photos
 
+    monet_generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+    photo_generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+
+    monet_discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+    photo_discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+
     cycle_gan_model = CycleGan(monet_generator=monet_generator,
                                photo_generator=photo_generator,
                                monet_discriminator=monet_discriminator,
@@ -34,31 +41,22 @@ def main():
                                output_layer1=output1,
                                output_layer2=output2,
                                lambda_cycle=3,
-                               lambda_id=3)
-
-    monet_generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-    photo_generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-
-    monet_discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-    photo_discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-
-    cycle_gan_model.compile(
-        m_gen_optimizer=monet_generator_optimizer,
-        p_gen_optimizer=photo_generator_optimizer,
-        m_disc_optimizer=monet_discriminator_optimizer,
-        p_disc_optimizer=photo_discriminator_optimizer,
-        gen_loss_fn1=generator_loss1,
-        gen_loss_fn2=generator_loss2,
-        disc_loss_fn1=discriminator_loss1,
-        disc_loss_fn2=discriminator_loss2,
-        cycle_loss_fn=cycle_loss,
-        identity_loss_fn=identity_loss,
-        aug_fn=aug_fn,
-
-    )
-
+                               lambda_id=3,
+                               m_gen_optimizer=monet_generator_optimizer,
+                               p_gen_optimizer=photo_generator_optimizer,
+                               m_disc_optimizer=monet_discriminator_optimizer,
+                               p_disc_optimizer=photo_discriminator_optimizer,
+                               gen_loss_fn1=generator_loss1,
+                               gen_loss_fn2=generator_loss2,
+                               disc_loss_fn1=discriminator_loss1,
+                               disc_loss_fn2=discriminator_loss2,
+                               cycle_loss_fn=cycle_loss,
+                               identity_loss_fn=identity_loss,
+                               aug_fn=aug_fn
+                               )
+    cycle_gan_model.compile()
     # steps per epoch = ceil(num_samples / batch_size)
-    cycle_gan_model.fit(final_dataset, steps_per_epoch=1, epochs=3)
+    cycle_gan_model.fit(final_dataset, steps_per_epoch=1, epochs=3, verbose=1)
 
 
 if __name__ == '__main__':
