@@ -10,8 +10,8 @@ from diffaugment import aug_fn
 
 def main():
 
-    batch_size = 16  # 64
-    epochs = 2  # 250
+    batch_size = 64
+    epochs = 250
     lambda_cycle_photo = 2.6
     lambda_cycle_monet = 3
     lambda_id = 3
