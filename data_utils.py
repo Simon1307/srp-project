@@ -40,10 +40,13 @@ def get_gan_dataset(monet_files, photo_files, augment=None, repeat=True, shuffle
         photo_ds = photo_ds.repeat()
 
     monet_ds = monet_ds.batch(batch_size, drop_remainder=True)
+    # Indentifier for every real photo
+    ind = tf.data.Dataset.range(7038)
+    photo_ds = tf.data.Dataset.zip((photo_ds, ind))
     photo_ds = photo_ds.batch(batch_size, drop_remainder=True)
 
-    #monet_ds = monet_ds.prefetch()
-    #photo_ds = photo_ds.prefetch()
+    monet_ds = monet_ds.prefetch()
+    photo_ds = photo_ds.prefetch()
 
     gan_ds = tf.data.Dataset.zip((monet_ds, photo_ds))
 
