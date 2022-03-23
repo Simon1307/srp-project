@@ -1,6 +1,7 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
 
+
 def down_sample(filters, size, apply_instancenorm=True):
     initializer = tf.random_normal_initializer(0., 0.02)
     gamma_init = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
