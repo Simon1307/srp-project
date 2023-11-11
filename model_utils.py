@@ -7,7 +7,14 @@ def down_sample(filters, size, apply_instancenorm=True):
     gamma_init = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
     layer = tf.keras.Sequential()
-    layer.add(tf.keras.layers.Conv2D(filters, size, strides=2, padding='same', kernel_initializer=initializer, use_bias=False))
+    layer.add(tf.keras.layers.Conv2D(
+        filters,
+        size,
+        strides=2,
+        padding='same',
+        kernel_initializer=initializer,
+        use_bias=False
+    ))
 
     if apply_instancenorm:
         layer.add(tfa.layers.InstanceNormalization(gamma_initializer=gamma_init))
@@ -22,7 +29,14 @@ def up_sample(filters, size, apply_dropout=False):
     gamma_init = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.02)
 
     layer = tf.keras.Sequential()
-    layer.add(tf.keras.layers.Conv2DTranspose(filters, size, strides=2, padding='same', kernel_initializer=initializer,use_bias=False))
+    layer.add(tf.keras.layers.Conv2DTranspose(
+        filters,
+        size,
+        strides=2,
+        padding='same',
+        kernel_initializer=initializer,
+        use_bias=False
+    ))
     layer.add(tfa.layers.InstanceNormalization(gamma_initializer=gamma_init))
 
     if apply_dropout:

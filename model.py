@@ -253,18 +253,6 @@ class CycleGan(tf.keras.Model):
             photo_gen_loss = self.gen_loss_fn1(disc_fake_photo)
             photo_disc_loss = self.disc_loss_fn1(disc_real_photo, disc_fake_photo)
 
-            # Caclculate losses for discriminator m_disc_guess and m_gen using real_monet and cycled_monet
-            # rand = tf.random.uniform(shape=[], minval=0, maxval=1, dtype=tf.float32, seed=123)
-            # concat_threshold = tf.constant(0.5)
-            # randomly decide the order of real and cycled monet
-            # disc_monet_guess_loss, gen_monet_guess_loss = tf.cond(pred=(rand > concat_threshold),
-            # true_fn=lambda: self.monet_guess_loss_false(real_monet, cycled_monet),
-            # false_fn=lambda: self.monet_guess_loss_true(real_monet, cycled_monet))
-            # randomly decide the order of real and cycled photo
-            # disc_photo_guess_loss, gen_photo_guess_loss = tf.cond(pred=(rand > concat_threshold),
-            # true_fn=lambda: self.photo_guess_loss_false(real_photo, cycled_photo),
-            # false_fn=lambda: self.photo_guess_loss_true(real_photo, cycled_photo))
-
             # Total Cycle Loss
             monet_cycle_loss = self.cycle_loss_fn(real_monet, cycled_monet,
                                                   self.lambda_cycle_monet / tf.cast(batch_size, tf.float32))
@@ -279,10 +267,9 @@ class CycleGan(tf.keras.Model):
                                                         self.lambda_id / tf.cast(batch_size, tf.float32))
 
             # Calculate total monet and photo generator loss
-            total_monet_gen_loss = monet_gen_loss + total_cycle_loss + monet_identity_loss  # + gen_monet_guess_loss + gen_photo_guess_loss
-            total_photo_gen_loss = photo_gen_loss + total_cycle_loss + photo_identity_loss  # + gen_photo_guess_loss + gen_monet_guess_loss
+            total_monet_gen_loss = monet_gen_loss + total_cycle_loss + monet_identity_loss
+            total_photo_gen_loss = photo_gen_loss + total_cycle_loss + photo_identity_loss
 
-        ######################################################
         # Calculate the gradients for generators, discriminators, and heads
         # Photo and Monet Generator
         monet_generator_gradients = tape.gradient(total_monet_gen_loss,
@@ -297,14 +284,6 @@ class CycleGan(tf.keras.Model):
                                                        self.m_disc2.trainable_variables)
         photo_discriminator_gradients = tape.gradient(photo_disc_loss,
                                                       self.p_disc.trainable_variables)
-        # print("photo disc gradients", photo_discriminator_gradients)
-        # Guess Discriminators
-        # monet_discriminator_guess_gradients = tape.gradient(disc_monet_guess_loss,
-        #                                              self.m_disc_guess.trainable_variables)
-        # photo_discriminator_guess_gradients = tape.gradient(disc_photo_guess_loss,
-        #                                              self.p_disc_guess.trainable_variables)
-        # print("Monet disc guess gradients", monet_discriminator_guess_gradients)
-        # print("Photo disc guess gradients", photo_discriminator_guess_gradients)
 
         # Heads gradients
         monet_head_gradients1 = tape.gradient(monet_output1_loss,
@@ -316,7 +295,6 @@ class CycleGan(tf.keras.Model):
         monet_head_gradients4 = tape.gradient(monet_output4_loss,
                                               self.output_layer4.trainable_variables)
 
-        ##############################################
         # Apply the gradients to the optimizer of generators, discriminators, and discriminator heads
         # Generators
         self.m_gen_optimizer.apply_gradients(zip(monet_generator_gradients,
@@ -342,11 +320,6 @@ class CycleGan(tf.keras.Model):
 
         self.m_disc_optimizer.apply_gradients(zip(monet_head_gradients4,
                                                   self.output_layer4.trainable_variables))
-        # Guess Discriminators
-        # self.monet_discriminator_optimizer_guess.apply_gradients(zip(monet_discriminator_guess_gradients,
-        #                                            self.m_disc_guess.trainable_variables))
-        # self.photo_discriminator_optimizer_guess.apply_gradients(zip(photo_discriminator_guess_gradients,
-        #                                            self.p_disc_guess.trainable_variables))
 
         return {
             "monet_gen_loss1": monet_gen_loss1,
@@ -363,10 +336,6 @@ class CycleGan(tf.keras.Model):
             "photo_gen_loss": photo_gen_loss,
             "photo_disc_loss": photo_disc_loss,
             "Total cycle loss": total_cycle_loss,
-            # "photo_disc_loss_guess": disc_photo_guess_loss,
-            # "monet_disc_loss_guess": disc_monet_guess_loss,
-            # "gen_monet_guess_loss": gen_monet_guess_loss,
-            # "gen_photo_guess_loss": gen_photo_guess_loss,
             "output1_prob": output1_prob,
             "output2_prob": output2_prob,
             "output3_prob": output3_prob,
