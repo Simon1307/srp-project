@@ -5,15 +5,15 @@
 
 ## Overview
 
-In this GitHub repository, I present an enhanced CycleGAN model with improved image-to-image translation performance, specifically focusing on the [Kaggle Monet dataset](https://www.kaggle.com/your-username/dataset-name). Our initial implementation utilized the CycleGAN model as a baseline, but encountered challenges such as mode collapse.
+In this GitHub repository, we present an enhanced CycleGAN model with improved image-to-image translation performance, specifically focusing on the [Kaggle Monet dataset](https://www.kaggle.com/your-username/dataset-name). Our initial implementation utilized the CycleGAN model as a baseline, but encountered challenges such as mode collapse.
 
 To address these issues, we innovatively merged concepts from D2GAN and MGAN, creating a Monet discriminator with two output layers and shared parameters. This approach significantly improved performance.
 
 Recognizing the importance of data efficiency, we introduced Differentiable Augmentation, augmenting both target domain samples and generated samples. This step contributed to refining our model.
 
-Our commitment to optimization continued with thorough hyperparameter tuning based on the MiFID metric. The culmination of our efforts yielded an enhanced model with a remarkable MiFID score, ultimately securing the 2nd position in the Kaggle competition.
+Our commitment to optimization continued with thorough hyperparameter tuning based on the MiFID metric. The culmination of our efforts yielded an enhanced model with a remarkable MiFID score, ultimately securing the 2nd position in the [Kaggle competition](https://www.kaggle.com/competitions/gan-getting-started).
 
-Explore this repository to delve into the details of the approach and leverage the contributions for your own image translation projects.
+Explore this repository to delve into the details of our approach and leverage our contributions for your own image translation projects.
 
 ## References
 
