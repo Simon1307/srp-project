@@ -1,6 +1,6 @@
 # Art Pieces from GANs Research Project
 
-![GAN Architecture](assets/gan_arch.jpg)
+![GAN Architecture](assets/model_arch.jpg)
 
 
 ## Overview
